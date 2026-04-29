@@ -1,0 +1,7 @@
+// ESP32 exemplo
+HTTPClient http;
+http.begin("http://SEU_SERVIDOR/registro");
+http.addHeader("Content-Type", "application/json");
+
+String json = "{\"id\":\"12345\"}";
+http.POST(json);
