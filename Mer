@@ -1,0 +1,18 @@
+CREATE TABLE turma (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(50)
+);
+
+CREATE TABLE aluno (
+    id VARCHAR PRIMARY KEY,
+    nome VARCHAR(100),
+    turma_id INTEGER REFERENCES turma(id)
+);
+
+CREATE TABLE registro (
+    id SERIAL PRIMARY KEY,
+    aluno_id VARCHAR REFERENCES aluno(id),
+    data DATE,
+    horario TIME,
+    status VARCHAR(20)
+);
