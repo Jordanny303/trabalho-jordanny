@@ -1,0 +1,37 @@
+from flask import Flask, request, jsonify
+import sqlite3
+from datetime import datetime
+
+app = Flask(__name__)
+
+def get_status(hora):
+    if hora <= "06:42":
+        return "Presente"
+    elif hora <= "07:15":
+        return "Atrasado"
+    else:
+        return "Falta"
+
+@app.route("/registro", methods=["POST"])
+def registro():
+    data = request.json
+    aluno_id = data["id"]
+
+    agora = datetime.now().strftime("%H:%M")
+    status = get_status(agora)
+
+    conn = sqlite3.connect("database.db")
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        INSERT INTO registros (aluno_id, horario, status)
+        VALUES (?, ?, ?)
+    """, (aluno_id, agora, status))
+
+    conn.commit()
+    conn.close()
+
+    return jsonify({"status": status})
+
+if __name__ == "__main__":
+    app.run(debug=True)
